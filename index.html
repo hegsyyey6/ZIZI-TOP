@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>PixelEdit | استودیو ادیت</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+:root{
+ --bg:#080b14;
+ --card:#111827;
+ --card2:#182236;
+ --text:#f8fafc;
+ --muted:#94a3b8;
+ --line:#263247;
+ --primary:#7c5cff;
+ --cyan:#16d9ff;
+ --green:#22c55e;
+ --red:#ef4444;
+ --yellow:#f59e0b;
+}
+
+*{
+ box-sizing:border-box;
+}
+
+body{
+ margin:0;
+ font-family:Tahoma,Arial,sans-serif;
+ background:
+ radial-gradient(circle at 10% 0%,#25165c,transparent 30%),
+ radial-gradient(circle at 90% 10%,#073b4d,transparent 25%),
+ var(--bg);
+ color:var(--text);
+}
+
+body.light{
+ --bg:#f5f7fb;
+ --card:#fff;
+ --card2:#eef2f7;
+ --text:#111827;
+ --muted:#64748b;
+ --line:#dbe3ee;
+}
+
+a{
+ color:inherit;
+ text-decoration:none;
+}
+
+button,input,textarea,select{
+ font:inherit;
+}
+
+button{
+ cursor:pointer;
+}
+
+.container{
+ width:min(1150px,92%);
+ margin:auto;
+}
+
+.hidden{
+ display:none!important;
+}
+
+
+/* HEADER */
+
+header{
+ position:sticky;
+ top:0;
+ z-index:50;
+ background:#080b14cc;
+ backdrop-filter:blur(18px);
+ border-bottom:1px solid var(--line);
+}
+
+.light header{
+ background:#ffffffcc;
+}
+
+.nav{
+ height:72px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+
+.logo{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ font-size:20px;
+ font-weight:900;
+}
+
+.logoIcon{
+ width:42px;
+ height:42px;
+ display:grid;
+ place-items:center;
+ border-radius:14px;
+ background:linear-gradient(135deg,var(--primary),var(--cyan));
+}
+
+.logo span{
+ color:var(--cyan);
+}
+
+nav{
+ display:flex;
+ gap:7px;
+}
+
+nav a, .theme{
+ border:0;
+ background:transparent;
+ color:var(--muted);
+ padding:10px 13px;
+ border-radius:11px;
+}
+
+nav a:hover,.theme:hover{
+ background:var(--card2);
+ color:var(--text);
+}
+
+
+/* BUTTON */
+
+.btn{
+ border:0;
+ border-radius:13px;
+ padding:12px 18px;
+ font-weight:800;
+ color:var(--text);
+ background:var(--card2);
+ border:1px solid var(--line);
+ transition:.2s;
+}
+
+.btn:hover{
+ transform:translateY(-2px);
+}
+
+.primary{
+ color:white;
+ border:0;
+ background:linear-gradient(135deg,var(--primary),#4d8cff);
+ box-shadow:0 12px 30px #7c5cff30;
+}
+
+.green{
+ background:#12351f;
+ color:#9df2b4;
+}
+
+.red{
+ background:#3b1519;
+ color:#ffaaaa;
+}
+
+
+/* HERO */
+
+.hero{
+ min-height:600px;
+ display:grid;
+ grid-template-columns:1.15fr .85fr;
+ align-items:center;
+ gap:50px;
+}
+
+.badge{
+ display:inline-block;
+ padding:7px 13px;
+ border-radius:999px;
+ background:#7c5cff18;
+ border:1px solid #7c5cff40;
+ color:#c8bcff;
+ font-size:12px;
+}
+
+.hero h1{
+ font-size:clamp(42px,6vw,75px);
+ line-height:1.08;
+ margin:20px 0;
+ letter-spacing:-3px;
+}
+
+.gradient{
+ background:linear-gradient(90deg,#a991ff,var(--cyan));
+ color:transparent;
+ background-clip:text;
+ -webkit-background-clip:text;
+}
+
+.hero p{
+ color:var(--muted);
+ line-height:2;
+ font-size:17px;
+ max-width:650px;
+}
+
+.actions{
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+ margin-top:25px;
+}
+
+
+/* HERO CARD */
+
+.showcase{
+ padding:28px;
+ border:1px solid var(--line);
+ background:linear-gradient(145deg,var(--card2),var(--card));
+ border-radius:28px;
+ box-shadow:0 30px 90px #0005;
+ animation:float 4s infinite ease-in-out;
+}
+
+@keyframes float{
+ 50%{transform:translateY(-12px)}
+}
+
+.showTop{
+ display:flex;
+ justify-content:space-between;
+ color:var(--muted);
+}
+
+.live{
+ color:var(--green);
+}
+
+.code{
+ font-size:30px;
+ font-weight:900;
+ letter-spacing:3px;
+ margin:55px 0 25px;
+}
+
+.progress{
+ height:9px;
+ background:var(--line);
+ border-radius:20px;
+ overflow:hidden;
+}
+
+.progress div{
+ height:100%;
+ width:75%;
+ background:linear-gradient(90deg,var(--primary),var(--cyan));
+}
+
+.steps{
+ display:flex;
+ justify-content:space-between;
+ margin-top:12px;
+ color:var(--muted);
+ font-size:10px;
+}
+
+
+/* SERVICES */
+
+.section{
+ padding:80px 0;
+}
+
+.title{
+ margin-bottom:25px;
+}
+
+.title h2{
+ margin:0;
+ font-size:32px;
+}
+
+.title p{
+ color:var(--muted);
+}
+
+.services{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:15px;
+}
+
+.service{
+ padding:23px;
+ background:var(--card);
+ border:1px solid var(--line);
+ border-radius:20px;
+ transition:.25s;
+}
+
+.service:hover{
+ transform:translateY(-7px);
+ border-color:var(--primary);
+}
+
+.serviceIcon{
+ font-size:35px;
+}
+
+.price{
+ font-size:22px;
+ font-weight:900;
+ color:var(--cyan);
+}
+
+
+/* PANEL */
+
+.panel{
+ padding:25px;
+ background:var(--card);
+ border:1px solid var(--line);
+ border-radius:22px;
+ box-shadow:0 20px 60px #0003;
+}
+
+.formGrid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:17px;
+}
+
+.field{
+ display:flex;
+ flex-direction:column;
+ gap:7px;
+}
+
+.full{
+ grid-column:1/-1;
+}
+
+label{
+ font-size:13px;
+ font-weight:bold;
+}
+
+input,textarea,select{
+ width:100%;
+ border:1px solid var(--line);
+ background:var(--card2);
+ color:var(--text);
+ border-radius:12px;
+ padding:13px;
+ outline:0;
+}
+
+textarea{
+ min-height:130px;
+ resize:vertical;
+}
+
+input:focus,textarea:focus,select:focus{
+ border-color:var(--primary);
+}
+
+
+/* PAYMENT */
+
+.paymentBox{
+ margin-top:20px;
+ padding:22px;
+ border:1px solid #f59e0b40;
+ background:#f59e0b09;
+ border-radius:18px;
+}
+
+.paymentBox h3{
+ margin-top:0;
+}
+
+.bank{
+ padding:15px;
+ background:var(--card2);
+ border-radius:14px;
+ margin:12px 0;
+}
+
+.bank b{
+ color:var(--cyan);
+}
+
+
+/* TRACK */
+
+.track{
+ display:grid;
+ grid-template-columns:1fr auto;
+ gap:10px;
+}
+
+.result{
+ margin-top:20px;
+}
+
+.orderCard{
+ background:var(--card);
+ border:1px solid var(--line);
+ border-radius:22px;
+ padding:25px;
+}
+
+.orderHeader{
+ display:flex;
+ justify-content:space-between;
+ gap:15px;
+ align-items:center;
+}
+
+.status{
+ padding:7px 12px;
+ border-radius:999px;
+ background:#7c5cff18;
+ color:#c4b8ff;
+ font-size:11px;
+}
+
+.infoGrid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:15px;
+ margin:25px 0;
+ padding:20px 0;
+ border-block:1px solid var(--line);
+}
+
+.info small{
+ color:var(--muted);
+ display:block;
+}
+
+.timeline{
+ display:flex;
+ flex-direction:column;
+ gap:17px;
+}
+
+.timelineItem{
+ display:flex;
+ gap:12px;
+ align-items:center;
+}
+
+.dot{
+ width:13px;
+ height:13px;
+ border-radius:50%;
+ background:var(--line);
+}
+
+.dot.active{
+ background:var(--green);
+ box-shadow:0 0 16px #22c55e80;
+}
+
+.timelineItem small{
+ display:block;
+ color:var(--muted);
+}
+
+.note{
+ padding:16px;
+ background:var(--card2);
+ border-radius:14px;
+ margin-top:20px;
+}
+
+
+/* RESULT */
+
+.finalResult{
+ margin-top:25px;
+ padding:20px;
+ border:1px solid #22c55e40;
+ background:#22c55e08;
+ border-radius:20px;
+}
+
+.finalResult img{
+ max-width:100%;
+ max-height:650px;
+ border-radius:15px;
+ display:block;
+ margin:15px auto;
+}
+
+
+/* SUPPORT */
+
+.support{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:20px;
+ padding:25px;
+ background:linear-gradient(135deg,#161332,#10242e);
+ border-radius:25px;
+ border:1px solid var(--line);
+}
+
+
+/* FOOTER */
+
+footer{
+ padding:35px 0;
+ border-top:1px solid var(--line);
+ color:var(--muted);
+}
+
+footer .container{
+ display:flex;
+ justify-content:space-between;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:850px){
+
+ .hero{
+  grid-template-columns:1fr;
+  padding:50px 0;
+ }
+
+ .services{
+  grid-template-columns:1fr;
+ }
+
+ .formGrid{
+  grid-template-columns:1fr;
+ }
+
+ .full{
+  grid-column:auto;
+ }
+
+ .infoGrid{
+  grid-template-columns:1fr;
+ }
+
+}
+
+@media(max-width:600px){
+
+ nav a{
+  display:none;
+ }
+
+ .hero h1{
+  font-size:43px;
+ }
+
+ .track{
+  grid-template-columns:1fr;
+ }
+
+ .support{
+  flex-direction:column;
+  text-align:center;
+ }
+
+ footer .container{
+  flex-direction:column;
+ }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="container nav">
+
+<a class="logo" href="#">
+<div class="logoIcon">✦</div>
+<div>Pixel<span>Edit</span></div>
+</a>
+
+<nav>
+<a href="#services">سرویس‌ها</a>
+<a href="#order">سفارش</a>
+<a href="#track">پیگیری</a>
+<a href="#support">پشتیبانی</a>
+<button class="theme" onclick="theme()">☾</button>
+</nav>
+
+</div>
+
+</header>
+
+
+<main>
+
+<section class="container hero">
+
+<div>
+
+<span class="badge">⚡ استودیو حرفه‌ای ادیت</span>
+
+<h1>
+ایده‌ات را تبدیل کن به
+<span class="gradient">یک تصویر خفن.</span>
+</h1>
+
+<p>
+سفارش ادیتت را ثبت کن، فایل‌ها را بفرست،
+رسید را جداگانه ثبت کن و با کد پیگیری،
+تمام مراحل سفارش را آنلاین دنبال کن.
+</p>
+
+<div class="actions">
+<a class="btn primary" href="#order">شروع سفارش ←</a>
+<a class="btn" href="#track">پیگیری سفارش</a>
+</div>
+
+</div>
+
+
+<div class="showcase">
+
+<div class="showTop">
+<span>نمونه سفارش</span>
+<span class="live">● آنلاین</span>
+</div>
+
+<div class="code">PX-8K2M9Q</div>
+
+<div class="progress">
+<div></div>
+</div>
+
+<div class="steps">
+<span>ثبت</span>
+<span>پرداخت</span>
+<span>تأیید</span>
+<span>ادیت</span>
+<span>تحویل</span>
+</div>
+
+</div>
+
+</section>
+
+
+<section id="services" class="section">
+
+<div class="container">
+
+<div class="title">
+<h2>سرویس‌های ادیت</h2>
+<p>سرویس موردنظرت را انتخاب کن.</p>
+</div>
+
+<div class="services">
+
+<div class="service">
+<div class="serviceIcon">🎨</div>
+<h3>ادیت حرفه‌ای عکس</h3>
+<p>رتوش، نور، رنگ و طراحی اختصاصی.</p>
+<div class="price">از ۱۵۰ هزار تومان</div>
+</div>
+
+<div class="service">
+<div class="serviceIcon">🎮</div>
+<h3>ادیت گیمینگ</h3>
+<p>پوستر، پروفایل و طراحی گیمینگ.</p>
+<div class="price">از ۲۰۰ هزار تومان</div>
+</div>
+
+<div class="service">
+<div class="serviceIcon">🖼️</div>
+<h3>کاور و Thumbnail</h3>
+<p>کاور حرفه‌ای برای شبکه‌های اجتماعی.</p>
+<div class="price">از ۱۲۰ هزار تومان</div>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section id="order" class="section">
+
+<div class="container">
+
+<div class="title">
+<h2>ثبت سفارش</h2>
+<p>اطلاعات ادیت را اینجا ثبت کن.</p>
+</div>
+
+
+<div class="panel">
+
+<div class="formGrid">
+
+<div class="field">
+<label>نام یا نام مستعار</label>
+<input id="name" placeholder="مثلاً Ali">
+</div>
+
+
+<div class="field">
+<label>سرویس</label>
+
+<select id="service">
+
+<option value="">انتخاب سرویس</option>
+<option>ادیت حرفه‌ای عکس</option>
+<option>ادیت گیمینگ</option>
+<option>کاور و Thumbnail</option>
+<option>سایر</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+<label>اولویت</label>
+
+<select id="priority">
+<option value="normal">عادی</option>
+<option value="urgent">فوری</option>
+</select>
+
+</div>
+
+
+<div class="field">
+<label>فایل اصلی</label>
+<input id="sourceFile" type="file" accept="image/*">
+</div>
+
+
+<div class="field full">
+<label>توضیحات دقیق سفارش</label>
+
+<textarea id="description"
+placeholder="رنگ، سبک، متن، اندازه و هر چیزی که ادیتور باید بداند..."></textarea>
+
+</div>
+
+</div>
+
+
+<button class="btn primary" onclick="createOrder()">
+ثبت سفارش ←
+</button>
+
+</div>
+
+
+<div id="paymentSection" class="paymentBox hidden">
+
+<h3>💳 مرحله دوم: پرداخت و ارسال رسید</h3>
+
+<p>
+سفارش ساخته شد. ابتدا مبلغ را پرداخت کن،
+سپس تصویر رسید را همینجا ارسال کن.
+</p>
+
+<div class="bank">
+شماره کارت:
+<br>
+<b>6037-0000-0000-0000</b>
+<br>
+به نام: PixelEdit
+</div>
+
+<p>
+کد پیگیری:
+<strong id="newCode"></strong>
+</p>
+
+<input id="receiptFile"
+       type="file"
+       accept="image/*">
+
+<br><br>
+
+<button class="btn primary"
+        onclick="uploadReceipt()">
+ارسال رسید پرداخت ✓
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section id="track" class="section">
+
+<div class="container">
+
+<div class="title">
+<h2>پیگیری سفارش</h2>
+<p>کد پیگیری را وارد کن.</p>
+</div>
+
+<div class="track">
+
+<input id="trackingCode"
+placeholder="مثلاً PX-A7K29M">
+
+<button class="btn primary"
+onclick="track()">
+پیگیری
+</button>
+
+</div>
+
+<div id="trackResult" class="result"></div>
+
+</div>
+
+</section>
+
+
+<section id="support" class="section">
+
+<div class="container">
+
+<div class="support">
+
+<div>
+<h2>پشتیبانی</h2>
+<p>
+اگر مشکلی داشتی از طریق تلگرام با ما در ارتباط باش.
+</p>
+</div>
+
+<a id="telegram"
+class="btn primary"
+href="https://t.me/"
+target="_blank">
+پشتیبانی تلگرام
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+<div class="container">
+
+<b>PixelEdit</b>
+
+<span>
+© 2026 PixelEdit
+</span>
+
+</div>
+
+</footer>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://YOUR_PROJECT.supabase.co";
+
+const SUPABASE_KEY =
+"YOUR_PUBLISHABLE_KEY";
+
+const db =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+/* THEME */
+
+function theme(){
+
+ document.body.classList.toggle("light");
+
+ localStorage.setItem(
+  "theme",
+  document.body.classList.contains("light")
+  ? "light"
+  : "dark"
+ );
+
+}
+
+if(localStorage.getItem("theme")==="light"){
+ document.body.classList.add("light");
+}
+
+
+/* CODE */
+
+function generateCode(){
+
+ const chars =
+ "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+ let code="PX-";
+
+ for(let i=0;i<6;i++){
+  code += chars[
+   Math.floor(Math.random()*chars.length)
+  ];
+ }
+
+ return code;
+
+}
+
+
+/* UPLOAD */
+
+async function uploadFile(file,path){
+
+ if(!file) return null;
+
+ const ext =
+ file.name.split(".").pop();
+
+ const filePath =
+ `${path}/${crypto.randomUUID()}.${ext}`;
+
+ const {error} =
+ await db.storage
+ .from("order-files")
+ .upload(filePath,file,{
+  upsert:false
+ });
+
+ if(error) throw error;
+
+ const {data} =
+ db.storage
+ .from("order-files")
+ .getPublicUrl(filePath);
+
+ return data.publicUrl;
+
+}
+
+
+/* CREATE ORDER */
+
+async function createOrder(){
+
+ const name =
+ document.getElementById("name").value.trim();
+
+ const service =
+ document.getElementById("service").value;
+
+ const description =
+ document.getElementById("description").value.trim();
+
+ const priority =
+ document.getElementById("priority").value;
+
+ const file =
+ document.getElementById("sourceFile").files[0];
+
+
+ if(!name || !service || !description){
+  alert("لطفاً اطلاعات سفارش را کامل کن.");
+  return;
+ }
+
+
+ const code=generateCode();
+
+
+ try{
+
+  let source=null;
+
+  if(file){
+
+   source =
+   await uploadFile(
+    file,
+    `source/${code}`
+   );
+
+  }
+
+
+  const {data,error} =
+  await db
+  .from("orders")
+  .insert({
+
+   tracking_code:code,
+   customer_name:name,
+   service_name:service,
+   description,
+   priority,
+   source_file:source
+
+  })
+  .select()
+  .single();
+
+
+  if(error) throw error;
+
+
+  document.getElementById("newCode")
+   .textContent=code;
+
+  document
+   .getElementById("paymentSection")
+   .classList.remove("hidden");
+
+
+  document.getElementById("paymentSection")
+   .scrollIntoView({
+    behavior:"smooth"
+   });
+
+
+ }catch(error){
+
+  console.error(error);
+
+  alert(
+   "ثبت سفارش انجام نشد: "+
+   error.message
+  );
+
+ }
+
+}
+
+
+/* RECEIPT */
+
+async function uploadReceipt(){
+
+ const code =
+ document.getElementById("newCode").textContent;
+
+ const file =
+ document.getElementById("receiptFile").files[0];
+
+
+ if(!file){
+  alert("تصویر رسید را انتخاب کن.");
+  return;
+ }
+
+
+ try{
+
+  const url =
+  await uploadFile(
+   file,
+   `receipts/${code}`
+  );
+
+
+  const {error} =
+  await db
+  .from("orders")
+  .update({
+   receipt_file:url,
+   status:"receipt_pending",
+   updated_at:new Date().toISOString()
+  })
+  .eq("tracking_code",code);
+
+
+  if(error) throw error;
+
+
+  alert(
+   "رسید ارسال شد ✅\nکد پیگیری: "+code
+  );
+
+ }catch(error){
+
+  alert(
+   "ارسال رسید ناموفق بود: "+
+   error.message
+  );
+
+ }
+
+}
+
+
+/* TRACK */
+
+async function track(){
+
+ const code =
+ document.getElementById("trackingCode")
+ .value
+ .trim()
+ .toUpperCase();
+
+ if(!code){
+  alert("کد پیگیری را وارد کن.");
+  return;
+ }
+
+
+ const {data,error} =
+ await db
+ .from("orders")
+ .select("*")
+ .eq("tracking_code",code)
+ .single();
+
+
+ const result =
+ document.getElementById("trackResult");
+
+
+ if(error || !data){
+
+  result.innerHTML=`
+   <div class="orderCard">
+    ❌ سفارشی با این کد پیدا نشد.
+   </div>
+  `;
+
+  return;
+
+ }
+
+
+ const labels={
+  awaiting_payment:"منتظر پرداخت",
+  receipt_pending:"رسید در انتظار بررسی",
+  receipt_rejected:"رسید رد شده",
+  paid:"پرداخت تأیید شد",
+  editing:"در حال ساخت عکس",
+  ready:"نتیجه آماده است",
+  delivered:"تحویل داده شد"
+ };
+
+
+ result.innerHTML=`
+
+ <div class="orderCard">
+
+  <div class="orderHeader">
+
+   <div>
+    <small>کد پیگیری</small>
+    <h2>${data.tracking_code}</h2>
+   </div>
+
+   <span class="status">
+    ${labels[data.status] || data.status}
+   </span>
+
+  </div>
+
+
+  <div class="infoGrid">
+
+   <div class="info">
+    <small>سفارش‌دهنده</small>
+    <b>${escape(data.customer_name)}</b>
+   </div>
+
+   <div class="info">
+    <small>سرویس</small>
+    <b>${escape(data.service_name)}</b>
+   </div>
+
+   <div class="info">
+    <small>اولویت</small>
+    <b>${data.priority==="urgent"?"فوری":"عادی"}</b>
+   </div>
+
+  </div>
+
+
+  <h3>وضعیت سفارش</h3>
+
+  <div class="timeline">
+
+   ${timeline(data)}
+
+  </div>
+
+
+  ${
+   data.admin_note
+   ?
+   `<div class="note">
+     💬 <b>پیام ادمین:</b>
+     <br>
+     ${escape(data.admin_note)}
+   </div>`
+   :""
+  }
+
+
+  ${
+   data.reject_reason
+   ?
+   `<div class="note">
+     ❌ <b>دلیل رد رسید:</b>
+     <br>
+     ${escape(data.reject_reason)}
+   </div>`
+   :""
+  }
+
+
+  ${
+   data.result_file
+   ?
+   `
+   <div class="finalResult">
+
+    <h3>🎨 نتیجه نهایی</h3>
+
+    <img src="${data.result_file}">
+
+    <a
+     class="btn primary"
+     href="${data.result_file}"
+     download
+     target="_blank">
+     ⬇ دانلود نتیجه
+    </a>
+
+   </div>
+   `
+   :""
+  }
+
+ </div>
+
+ `;
+
+}
+
+
+function timeline(data){
+
+ const statuses=[
+  ["awaiting_payment","ثبت سفارش"],
+  ["receipt_pending","ارسال رسید"],
+  ["paid","تأیید پرداخت"],
+  ["editing","در حال ادیت"],
+  ["ready","نتیجه آماده"],
+  ["delivered","تحویل"]
+ ];
+
+ const current=
+ statuses.findIndex(
+  x=>x[0]===data.status
+ );
+
+ return statuses.map((item,i)=>`
+
+  <div class="timelineItem">
+
+   <div class="dot ${
+    i<=current ? "active":""
+   }"></div>
+
+   <div>
+    <b>${item[1]}</b>
+   </div>
+
+  </div>
+
+ `).join("");
+
+}
+
+
+function escape(text){
+
+ return String(text)
+ .replaceAll("&","&amp;")
+ .replaceAll("<","&lt;")
+ .replaceAll(">","&gt;")
+ .replaceAll('"',"&quot;")
+ .replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+  </html>
